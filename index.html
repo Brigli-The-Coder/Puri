@@ -35,7 +35,7 @@
 
   /* ── NAV ── */
   nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 clamp(1.2rem, 4vw, 3rem);
     height: 70px;
@@ -100,13 +100,20 @@
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
   .mobile-menu {
-    display: none; position: fixed; inset: 70px 0 0 0; z-index: 999;
-    background: var(--warm-white); flex-direction: column;
+    display: flex;
+    position: fixed; top: 70px; left: 0; right: 0; bottom: 0;
+    z-index: 9999;
+    background: #FAF7F0;
+    flex-direction: column;
     align-items: center; justify-content: center; gap: 2.5rem;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s;
+    opacity: 0; pointer-events: none; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
   }
-  .mobile-menu.open { opacity: 1; pointer-events: all; }
+  .mobile-menu.open {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+  }
   .mobile-menu a {
     font-family: 'Playfair Display', serif; font-size: 2rem;
     color: var(--dark-earth); text-decoration: none;
@@ -499,13 +506,23 @@
 </nav>
 
 <!-- MOBILE MENU -->
-<nav class="mobile-menu" id="mobileMenu">
-  <a href="#about" onclick="closeMobile()">Rreth Nesh</a>
-  <a href="#menu" onclick="closeMobile()">Menyja</a>
-  <a href="#visit" onclick="closeMobile()">Vizita</a>
-  <a href="#reviews" onclick="closeMobile()">Vlerësime</a>
-  <a href="https://search.google.com/local/writereview?placeid=ChIJ0x-GR_sAThMRLb0XfyqR8lk" target="_blank" onclick="closeMobile()" style="color:var(--gold)">Na Vlerëso ★</a>
-</nav>
+<div id="mobileMenu" style="
+  display: none;
+  position: fixed;
+  top: 70px; left: 0; right: 0; bottom: 0;
+  z-index: 9999;
+  background-color: #FAF7F0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+">
+  <a href="#about" onclick="closeMobile()" style="font-family:'Playfair Display',serif;font-size:2rem;color:#5C3A1E;text-decoration:none;">Rreth Nesh</a>
+  <a href="#menu" onclick="closeMobile()" style="font-family:'Playfair Display',serif;font-size:2rem;color:#5C3A1E;text-decoration:none;">Menyja</a>
+  <a href="#visit" onclick="closeMobile()" style="font-family:'Playfair Display',serif;font-size:2rem;color:#5C3A1E;text-decoration:none;">Vizita</a>
+  <a href="#reviews" onclick="closeMobile()" style="font-family:'Playfair Display',serif;font-size:2rem;color:#5C3A1E;text-decoration:none;">Vlerësime</a>
+  <a href="https://search.google.com/local/writereview?placeid=ChIJ0x-GR_sAThMRLb0XfyqR8lk" target="_blank" onclick="closeMobile()" style="font-family:'Playfair Display',serif;font-size:2rem;color:#C8973A;text-decoration:none;">Na Vlerëso ★</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -786,12 +803,13 @@ const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
-  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  const isOpen = hamburger.classList.contains('open');
+  mobileMenu.style.display = isOpen ? 'flex' : 'none';
+  document.body.style.overflow = isOpen ? 'hidden' : '';
 });
 function closeMobile() {
   hamburger.classList.remove('open');
-  mobileMenu.classList.remove('open');
+  mobileMenu.style.display = 'none';
   document.body.style.overflow = '';
 }
 
